@@ -3,7 +3,7 @@ import React from 'react';
 
 function Footer() {
   return (
-    <div className='h-12 md-24 p-4 lg:p-10 xl:p-10 text-red-500 flex items-center justify-between  border-t-2 border-red-500'>
+    <div className='h-12 md-24 md:h-24 lg:px-20 xl:px-40 text-red-500 flex items-center justify-between  border-t-2 border-red-500'>
       <Link href='/' className='font-bold text-xl'>
         Picikato
       </Link>
