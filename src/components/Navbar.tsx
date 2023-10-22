@@ -36,7 +36,7 @@ function Navbar() {
           <span>223 305</span>
         </div>
         {!user ? (
-          <Link href='/'>Login</Link>
+          <Link href='/login'>Login</Link>
         ) : (
           <Link href='/orders'>Orders</Link>
         )}
