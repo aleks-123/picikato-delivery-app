@@ -3,6 +3,7 @@ import Menu from './Menu';
 import Link from 'next/link';
 import Carticon from './Carticon';
 import Image from 'next/image';
+import UserLinks from './UserLinks';
 
 function Navbar() {
   // da se napravi nesto dali kolata e dizel ili ne
@@ -35,11 +36,7 @@ function Navbar() {
           />
           <span>223 305</span>
         </div>
-        {!user ? (
-          <Link href='/login'>Login</Link>
-        ) : (
-          <Link href='/orders'>Orders</Link>
-        )}
+        <UserLinks />
 
         <Carticon />
       </div>
