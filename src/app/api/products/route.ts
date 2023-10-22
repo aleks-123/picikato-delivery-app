@@ -8,10 +8,14 @@ export const GET = async (req: NextRequest) => {
 
   // localhost:3000/api/products?cat="pizzas"
   try {
+    // const products = await prisma.product.findMany({
+    //   where: {
+    //     ...(cat ? { catSlug: cat } : { isFeatured: true }),
+    //   },
+    // });
+
     const products = await prisma.product.findMany({
-      where: {
-        ...(cat ? { catSlug: cat } : { isFeatured: true }),
-      },
+      where: cat ? { catSlug: cat } : { isFeatured: true },
     });
 
     // console.log(products);
