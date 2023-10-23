@@ -36,6 +36,15 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async jwt({ token }) {
+      const userInDb = await prisma.user.findUnique({
+        where: {
+          email: token.email!,
+        },
+      });
+      token.isAdmin = userInDb?.isAdmin!;
+      return token;
+    },
   },
 };
 

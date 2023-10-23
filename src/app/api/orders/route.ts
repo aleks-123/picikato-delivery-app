@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // FETCH ALL orders
 export const GET = async (req: NextRequest) => {
   const session = await getAuthSession();
+  console.log(session);
   if (session) {
     try {
       const orders = await prisma.product.findMany();
