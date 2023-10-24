@@ -1,8 +1,9 @@
 'use client';
 
 import { OrderType } from '@/types/types';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -20,9 +21,38 @@ function OrdersPage() {
       fetch('http://localhost:3000/api/orders').then((res) => res.json()),
   });
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) => {
+      return fetch(`http://localhost:3000/api/orders/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(status),
+      });
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+    },
+  });
+
   if (isPending || status === 'loading') return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
+
+  const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
+    e.preventDefault();
+    console.log('click');
+    const form = e.target as HTMLFormElement;
+    const input = form.elements[0] as HTMLInputElement;
+    const status = input.value;
+    console.log(status);
+
+    mutation.mutate({ id, status });
+  };
+
   return (
     <div className='p-4 lg:px-20 xl:px-40'>
       <table className='w-full border-separate border-spacing-3'>
@@ -44,17 +74,33 @@ function OrdersPage() {
               </td>
               <td className='py-6 px-1'>${item.price}</td>
               <td className='hidden md:block'>
-                {item?.products.map((item) => (
-                  <span key={item.id}>{item.title},</span>
+                {item?.products.map((item, index) => (
+                  <span key={index}>{item.title},</span>
                 ))}
               </td>
               <td>{item.status}</td>
               {session?.user.isAdmin ? (
                 <td>
-                  <input
-                    placeholder={item.status}
-                    className='p-2 ring-1 ing-red-100 rounded-md'
-                  ></input>
+                  <form
+                    onSubmit={(e) => handleUpdate(e, item.id)}
+                    className='flex items-center justify-center gap-4'
+                  >
+                    <input
+                      placeholder={item.status}
+                      className='p-2 ring-1 ring-red-100 rounded-md '
+                    />
+                    <button
+                      type='submit'
+                      className='bg-red-400 p-2 rounded-full'
+                    >
+                      <Image
+                        src='/edit.png'
+                        alt='button image'
+                        width={20}
+                        height={20}
+                      />
+                    </button>
+                  </form>
                 </td>
               ) : (
                 <td className='py-6 px-1'>{item.status}</td>
