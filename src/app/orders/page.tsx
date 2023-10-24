@@ -43,7 +43,11 @@ function OrdersPage() {
                 {item.createdAt.toString().slice(0, 10)}
               </td>
               <td className='py-6 px-1'>${item.price}</td>
-              <td className='hidden md:block'>{item.products[0].title}</td>
+              <td className='hidden md:block'>
+                {item?.products.map((item) => (
+                  <span key={item.id}>{item.title},</span>
+                ))}
+              </td>
               <td>{item.status}</td>
               {session?.user.isAdmin ? (
                 <td>
