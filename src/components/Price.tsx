@@ -1,19 +1,20 @@
 'use client';
 
 import { Product } from '@/types/types';
+import { useCartStore } from '@/utils/store';
 import React, { useEffect, useState } from 'react';
-
-type Props = {
-  price: number;
-  id: string;
-  options?: { title: string; additionalPrice: number }[];
-};
+import { toast } from 'react-toastify';
 
 function Price({ product }: { product: Product }) {
   const [total, setTotal] = useState(product.price);
   const [quantity, setQuantity] = useState(1);
   const [selected, setSelected] = useState(0);
 
+  const { addToCart } = useCartStore();
+
+  useEffect(() => {
+    useCartStore.persist.rehydrate();
+  }, []);
   useEffect(() => {
     if (product.options?.length) {
       setTotal(
@@ -25,6 +26,21 @@ function Price({ product }: { product: Product }) {
   //! THIS WORKS TOO
   // const totalPrice =
   //   quantity * (options ? price + options[selected].additionalPrice : price);
+
+  const handleCart = () => {
+    addToCart({
+      id: product.id,
+      title: product.title,
+      img: product.img,
+      price: +product.price,
+      ...(product.options?.length && {
+        optionTitle: product.options[selected].title,
+      }),
+      quantity: quantity,
+    });
+
+    toast.success('The product added to the cart');
+  };
 
   return (
     <div className='flex flex-col gap-4'>
@@ -66,7 +82,10 @@ function Price({ product }: { product: Product }) {
           </div>
         </div>
         {/* CART BUTTON */}
-        <button className='uppercase w-56 bg-red-500 text-white p-3 ring-1 ring-red-500'>
+        <button
+          onClick={handleCart}
+          className='uppercase w-56 bg-red-500 text-white p-3 ring-1 ring-red-500'
+        >
           Add to Cart
         </button>
       </div>
