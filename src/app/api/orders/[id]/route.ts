@@ -6,7 +6,6 @@ export const PUT = async (
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
-  console.log(id);
   try {
     const body = await req.json();
     await prisma.order.update({

@@ -45,15 +45,13 @@ function OrdersPage() {
 
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
-    console.log('click');
     const form = e.target as HTMLFormElement;
     let input = form.elements[0] as HTMLInputElement;
     const status = input.value;
-    console.log(status);
 
     mutation.mutate({ id, status });
-    toast.success("The order status has been changed!")
-    input.value = ""
+    toast.success('The order status has been changed!');
+    input.value = '';
   };
 
   return (
@@ -69,9 +67,13 @@ function OrdersPage() {
           </tr>
         </thead>
         <tbody>
-      
           {data?.map((item: OrderType) => (
-            <tr key={item.id} className={`${item.status !== "delivered" && "bg-red-50" } text-sm md:text-base`}>
+            <tr
+              key={item.id}
+              className={`${
+                item.status !== 'delivered' && 'bg-red-50'
+              } text-sm md:text-base`}
+            >
               <td className='hidden md:block py-6 px-1'>{item.id}</td>
               <td className='py-6 px-1'>
                 {item.createdAt.toString().slice(0, 10)}

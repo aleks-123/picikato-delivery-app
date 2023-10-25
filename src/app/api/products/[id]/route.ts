@@ -13,7 +13,6 @@ export const GET = async (
         id: id,
       },
     });
-    console.log(product);
 
     return new NextResponse(JSON.stringify(product), { status: 200 });
   } catch (err) {
