@@ -25,10 +25,12 @@ function CartPage() {
               />
             )}
             <div className=''>
-              <h1 className='uppercase text-xl font-bold'>{product.title}</h1>
+              <h1 className='uppercase text-xl font-bold'>
+                {product.title} x{product.quantity}
+              </h1>
               <span className=''>{product.optionTitle}</span>
             </div>
-            <h2 className='font-bold'>${product.price}</h2>
+            <h2 className='font-bold'>${product.price} </h2>
             <span
               className='cursor-pointer'
               onClick={() => removeFromCart(product)}
