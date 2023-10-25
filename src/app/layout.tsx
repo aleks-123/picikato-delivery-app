@@ -6,12 +6,15 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AuthProvider from '@/components/AuthProvider';
 import QueryProvider from '@/components/QueryProvider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Picikato Delivery',
-  description: 'Pizza bar resturant Picikato',
+  description: 'Pizza bar restaurant Picikato',
 };
 
 export default function RootLayout({
@@ -28,6 +31,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <Footer />
+            <ToastContainer position='bottom-right' theme='dark' autoClose={3000}/>
           </QueryProvider>
         </AuthProvider>
       </body>

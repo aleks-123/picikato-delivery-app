@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 function OrdersPage() {
   const { data: session, status } = useSession();
@@ -46,11 +47,13 @@ function OrdersPage() {
     e.preventDefault();
     console.log('click');
     const form = e.target as HTMLFormElement;
-    const input = form.elements[0] as HTMLInputElement;
+    let input = form.elements[0] as HTMLInputElement;
     const status = input.value;
     console.log(status);
 
     mutation.mutate({ id, status });
+    toast.success("The order status has been changed!")
+    input.value = ""
   };
 
   return (
@@ -66,8 +69,9 @@ function OrdersPage() {
           </tr>
         </thead>
         <tbody>
+      
           {data?.map((item: OrderType) => (
-            <tr key={item.id} className='text-sm md:text-base bg-red-50'>
+            <tr key={item.id} className={`${item.status !== "delivered" && "bg-red-50" } text-sm md:text-base`}>
               <td className='hidden md:block py-6 px-1'>{item.id}</td>
               <td className='py-6 px-1'>
                 {item.createdAt.toString().slice(0, 10)}
