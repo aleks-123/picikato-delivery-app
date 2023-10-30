@@ -1,12 +1,17 @@
 import { prisma } from '@/utils/connect';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // This is your test secret API key.
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-export const POST = async ({ params }: { params: { id: string } }) => {
+export const POST = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   try {
     const { id } = params;
+
+    console.log(id);
 
     const order = await prisma.order.findUnique({
       where: {
@@ -44,6 +49,7 @@ export const POST = async ({ params }: { params: { id: string } }) => {
       });
     }
   } catch (err) {
+    console.log(err);
     return new NextResponse(
       JSON.stringify({ message: 'Fail to make payment' }),
       {

@@ -1,12 +1,14 @@
 'use client';
 
 import {
+  AddressElement,
   LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
+import AddressForm from './AdressForm';
 
 function CheckoutForm() {
   const stripe = useStripe();
@@ -47,7 +49,7 @@ function CheckoutForm() {
     });
   }, [stripe]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -62,7 +64,7 @@ function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: 'http://localhost:3000',
+        return_url: 'http://localhost:3000/success',
       },
     });
 
@@ -72,7 +74,7 @@ function CheckoutForm() {
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
     if (error.type === 'card_error' || error.type === 'validation_error') {
-      setMessage(error.message);
+      setMessage(error.message || 'Something went wrong');
     } else {
       setMessage('An unexpected error occurred.');
     }
@@ -80,16 +82,20 @@ function CheckoutForm() {
     setIsLoading(false);
   };
 
-  const paymentElementOptions = {
-    layout: 'tabs',
-  };
   return (
-    <form id='payment-form' onSubmit={handleSubmit}>
-      <LinkAuthenticationElement
-        id='link-authentication-element'
-        onChange={(e) => setEmail(e.target.value)}
+    <form
+      id='payment-form'
+      onSubmit={handleSubmit}
+      className='min-h-[calc(100vh-6rem)] md:min-h-[calc(100vh-15rem)] p-4 lg:px-20 xl:px-40 flex flex-col gap-8'
+    >
+      <LinkAuthenticationElement id='link-authentication-element' />
+      <PaymentElement
+        id='payment-element'
+        options={{
+          layout: 'tabs',
+        }}
       />
-      <PaymentElement id='payment-element' options={paymentElementOptions} />
+      <AddressForm />
       <button disabled={isLoading || !stripe || !elements} id='submit'>
         <span id='button-text'>
           {isLoading ? <div className='spinner' id='spinner'></div> : 'Pay now'}
