@@ -14,6 +14,7 @@ export type Product = {
   img?: string;
   price: number;
   options?: { title: string; additionalPrice: number }[];
+  catSlug?: string;
 };
 
 export type OrderType = {

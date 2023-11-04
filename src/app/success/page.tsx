@@ -10,14 +10,19 @@ function SuccessPage() {
   const payment_intent = searchParams.get('payment_intent');
   const router = useRouter();
 
+  console.log(payment_intent);
+
   useEffect(() => {
     const makeRequest = async () => {
       try {
-        await fetch(`http://localhost:3000/api/confirm/${payment_intent}`, {
-          method: 'PUT',
-        });
-        console.log('test');
-        router.push('/orders');
+        const data = await fetch(
+          `http://localhost:3000/api/confirm/${payment_intent}`,
+          {
+            method: 'PUT',
+          }
+        );
+        console.log(data);
+        // router.push('/orders');
       } catch (err) {
         console.log(err);
       }

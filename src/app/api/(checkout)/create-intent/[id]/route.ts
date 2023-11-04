@@ -21,12 +21,14 @@ export const POST = async (
     if (order) {
       // Create a PaymentIntent with the order amount and currency
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: 100 * 100,
+        amount: +order.price * 100,
         currency: 'usd',
         automatic_payment_methods: {
           enabled: true,
         },
       });
+
+      console.log(paymentIntent);
 
       await prisma.order.update({
         where: {
@@ -36,6 +38,7 @@ export const POST = async (
           intent_id: paymentIntent.id,
         },
       });
+      console.log(paymentIntent.client_secret);
 
       return new NextResponse(
         JSON.stringify({ clientSecret: paymentIntent.client_secret }),
